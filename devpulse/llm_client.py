@@ -71,7 +71,7 @@ class DevPulseLLMClient:
         score = 9.0
         lines = code_content.split("\n")
         for idx, line in enumerate(lines, 1):
-            if "api_key" in line.lower() and "=" in line and not "os.environ" in line:
+            if "api_key" in line.lower() and "=" in line and not ("os.getenv" in line or "os.environ" in line or "getenv(" in line):
                 issues.append(f"Line {idx}: Potential hardcoded secret/API key detected.")
                 score -= 1.5
             if "eval(" in line or "exec(" in line:
