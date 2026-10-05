@@ -1,0 +1,35 @@
+name: ⚡ AI-DevPulse Codebase Audit & Security Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/checkout@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install AI-DevPulse
+        run: |
+          pip install rich requests
+          pip install -e .
+
+      - name: Run AI-DevPulse Audit
+        run: |
+          devpulse --path . --provider heuristic --report DEVPULSE_REPORT.md
+
+      - name: Upload Audit Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: devpulse-report
+          path: DEVPULSE_REPORT.md
